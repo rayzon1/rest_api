@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CourseButtons from "../components/CourseButtons";
+import axios from 'axios';
 
-export default function Home() {
+export default function Courses() {
+  // API Url for for courses.
+  const coursesUrl = 'http://localhost:5000/api/courses'
+
+  // Local component state for course data.
+  const [courseData, setCourseData] = useState(null);
+
+  // Function to fetch courses from API.
+  const fetchCourses = url => {
+    axios
+      .get(url)
+      .then(data => {
+        setCourseData(data.data);
+      })
+  }
+
+  // Fetch all courses in side-effect.
+  useEffect(() => {
+    fetchCourses(coursesUrl);
+  }, [])
+
+
   return (
     <div id="root">
       <hr />
       <div class="bounds">
-        <CourseButtons />
+        <CourseButtons data={courseData}/>
         <div class="grid-33">
           <a
             class="course--module course--add--module"

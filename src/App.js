@@ -3,7 +3,7 @@ import "./App.css";
 import "./global.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
-import Home from "./containers/Home";
+import Courses from "./containers/Courses";
 
 // Main container for routes to all components.
 function App() {
@@ -13,7 +13,7 @@ function App() {
         <Header />
 
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Courses} />
           {/* <Route path="/authenticated" component={AuthWithContext} />
         <Route path="/settings" component={AuthWithContext} />
         <Route path="/signin" component={UserSignInWithContext} />

@@ -1,22 +1,23 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const data = [
-  { title: "Build a Basic Bookcase" },
-  { title: "Learn How to Program" },
-  { title: "Learn How to Test JS" }
-];
-
-export default function CourseButtons() {
+export default function CourseButtons({ data }) {
   return (
     <>
-      {data.map(data => (
-        <div class="grid-33">
-          <a class="course--module course--link" href="course-detail.html">
-            <h4 class="course--label">Course</h4>
-            <h3 class="course--title">{data.title}</h3>
-          </a>
-        </div>
-      ))}
+      {data &&
+        data.map(data => {
+          console.log(data.id);
+          return (
+            <div class="grid-33">
+              <Link to="/course_details">
+                <div class="course--module course--link">
+                  <h4 class="course--label">Course</h4>
+                  <h3 class="course--title">{data.title}</h3>
+                </div>
+              </Link>
+            </div>
+          );
+        })}
     </>
   );
 }
