@@ -3,7 +3,7 @@ import "./App.css";
 import "./global.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
-import Courses from "./containers/Courses";
+import Courses from "./components/Courses";
 
 // Main container for routes to all components.
 function App() {

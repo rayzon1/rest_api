@@ -6,13 +6,12 @@ export default function CourseButtons({ data }) {
     <>
       {data &&
         data.map(data => {
-          console.log(data.id);
           return (
-            <div class="grid-33">
+            <div className="grid-33" key={data.id} onClick={() => console.log(data.id)}>
               <Link to="/course_details">
-                <div class="course--module course--link">
-                  <h4 class="course--label">Course</h4>
-                  <h3 class="course--title">{data.title}</h3>
+                <div className="course--module course--link">
+                  <h4 className="course--label">Course</h4>
+                  <h3 className="course--title">{data.title}</h3>
                 </div>
               </Link>
             </div>
