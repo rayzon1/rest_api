@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CourseButtons from "./CourseButtons";
 import axios from 'axios';
 
-export default function Courses({ setClickedIndex }) {
+export default function Courses() {
   // API Url for for courses.
   const coursesUrl = 'http://localhost:5000/api/courses'
 
@@ -25,7 +25,7 @@ export default function Courses({ setClickedIndex }) {
     <div id="root">
       <hr />
       <div className="bounds">
-        <CourseButtons data={courseData} setClickedIndex={setClickedIndex} />
+        <CourseButtons data={courseData} />
         <div className="grid-33">
           <a
             className="course--module course--add--module"
