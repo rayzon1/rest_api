@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CourseButtons from "./CourseButtons";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 export default function Courses() {
   // API Url for for courses.
@@ -22,14 +23,14 @@ export default function Courses() {
 
 
   return (
-    <div id="root">
+    <>
       <hr />
       <div className="bounds">
         <CourseButtons data={courseData} />
         <div className="grid-33">
-          <a
+          <Link
             className="course--module course--add--module"
-            href="create-course.html"
+            to="/courses/create"
           >
             <h3 className="course--add--title">
               <svg
@@ -44,9 +45,9 @@ export default function Courses() {
               </svg>
               New Course
             </h3>
-          </a>
+          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }
