@@ -14,6 +14,8 @@ export default function CourseDetail() {
     str.length - 1
   )}`;
 
+  const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`
+
   // Fetch main course details from api.
   const fetchCourseDetail = async url => {
     const course = await axios.get(url);
@@ -47,9 +49,9 @@ export default function CourseDetail() {
             <div className="bounds">
               <div className="grid-100">
                 <span>
-                  <a className="button" href="update-course.html">
+                  <Link className="button" to={courseDetailId}>
                     Update Course
-                  </a>
+                  </Link>
                   <a className="button" href="#">
                     Delete Course
                   </a>

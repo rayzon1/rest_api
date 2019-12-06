@@ -1,15 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CreateCourse() {
 
-
-
-
-    
+  // Commented section will be to display error messages.
   return (
     <div className="bounds course--detail">
       <div>
-        <div>
+        {/* <div>
           <h2 className="validation--errors--label">Validation errors</h2>
           <div className="validation-errors">
             <ul>
@@ -17,10 +15,10 @@ export default function CreateCourse() {
               <li>Please provide a value for "Description"</li>
             </ul>
           </div>
-        </div>
+        </div> */}
         <form onSubmit={e => {
           e.preventDefault();
-          console.log(e);
+          console.log('submitted');
           }}>
           <div className="grid-66">
             <div className="course--header">
@@ -80,12 +78,12 @@ export default function CreateCourse() {
             <button className="button" type="submit">
               Create Course
             </button>
-            <button
+            <Link
               className="button button-secondary"
-              // onClick="event.preventDefault(); location.href='index.html';"
+              to="/"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>
