@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function UserSignIn( { dispatch } ) {
+export default function UserSignIn( { dispatch, signIn } ) {
   return (
     <>
       <hr />
@@ -9,7 +9,10 @@ export default function UserSignIn( { dispatch } ) {
         <div className="grid-33 centered signin">
           <h1>Sign In</h1>
           <div>
-            <form>
+            <form onSubmit={e => {
+                e.preventDefault();
+                signIn();
+              }}>
               <div>
                 <input
                   id="emailAddress"
@@ -46,7 +49,7 @@ export default function UserSignIn( { dispatch } ) {
           </div>
           <p>&nbsp;</p>
           <p>
-            Don't have a user account? <a href="sign-up.html">Click here</a> to
+            Don't have a user account? <Link to="/signup">Click here</Link> to
             sign up!
           </p>
         </div>

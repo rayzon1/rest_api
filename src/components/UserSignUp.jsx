@@ -67,7 +67,7 @@ export default function UserSignUp() {
           </div>
           <p>&nbsp;</p>
           <p>
-            Already have a user account? <a href="sign-in.html">Click here</a>{" "}
+            Already have a user account? <Link to="/signin">Click here</Link>{" "}
             to sign in!
           </p>
         </div>
