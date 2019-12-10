@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserName, setUserPassword } from "../actions/SignInActions";
@@ -12,11 +12,6 @@ function UserSignIn({
   setFailedSignIn
 }) {
 
-  // temp state to dispatch in signIn function.
-
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
 
   const signInState = useSelector(state => state);
@@ -27,6 +22,7 @@ function UserSignIn({
     }
   }, [signedInUser]);
 
+
   const validationErrors = () => {
     return (
       <>
@@ -34,19 +30,11 @@ function UserSignIn({
         <div class="validation-errors">
           <ul>
             <li style={{ color: 'red' }}>Email address and/or password is incorrect.</li>
-            {/* <li>Please provide a value for "Description"</li> */}
           </ul>
         </div>
       </>
     );
   };
-
-  // Try to avoid expensive re-renders.
-  const handleChange = useCallback(
-    (func, event) => {
-      func(event);
-    }
-  )
 
   return (
     <>
@@ -60,8 +48,6 @@ function UserSignIn({
             <form
               onSubmit={e => {
                 e.preventDefault();
-                // dispatch({ type: "setUserName", payload: username });
-                // dispatch({ type: "setUserPassword", payload: password });
                 signIn();
               }}
             >
@@ -75,7 +61,6 @@ function UserSignIn({
                   style={failedSignIn ? { border: '1px solid red' } : null}
                   onChange={e => {
                     setFailedSignIn(false);
-                    // setUsername(e.target.value);
                     dispatch(setUserName(e.target.value));
                   }}
                 />
@@ -91,7 +76,6 @@ function UserSignIn({
                   onChange={e => {
                     setFailedSignIn(false);
                     dispatch(setUserPassword(e.target.value));
-                    // setPassword(e.target.value);
                   }}
                 />
               </div>

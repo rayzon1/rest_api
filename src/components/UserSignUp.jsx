@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function UserSignUp() {
+
+  // Put input information in local state then make POST request to users path.
+  const [signUpInformation, setSignUpInformation] = useState({
+    firstName: '',
+    lastName: '',
+    emailAddress: '',
+    password: '',
+    confirmPassword: '',
+  })
+
+
   return (
     <>
       <hr />

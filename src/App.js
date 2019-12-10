@@ -13,13 +13,12 @@ import UpdateCourse from "./components/UpdateCourse";
 import NotFound from "./components/NotFound";
 import Axios from "axios";
 import { setUserName, setUserPassword } from "./actions/SignInActions";
-// import { credentialsState, credentialsReducer } from "./reducers";
+import PrivateRoute from './PrivateRoute';
 
 const coursesUrl = "http://localhost:5000/api/users";
 
 // Main container for routes to all components.
 function App() {
-  // const [state, dispatchCred] = useReducer(credentialsReducer, credentialsState);
   const [signedInUser, setSignedInUser] = useState(null);
   const [failedSignIn, setFailedSignIn] = useState(false);
 
@@ -29,7 +28,6 @@ function App() {
 
   // SignIn function will authorize user with api and save auth credentials to state.
   const signIn = () => {
-    console.log(signin)
     // Headers and auth headers for the request.
     const headerObject = {
       method: "get",
@@ -68,8 +66,8 @@ function App() {
 
   const signOut = () => {
     setSignedInUser(null);
-    // dispatchCred({ type: "setUserName", payload: "" });
-    // dispatchCred({ type: "setUserPassword", payload: "" });
+    dispatch(setUserName(''));
+    dispatch(setUserPassword(''));
   };
 
   return (
@@ -81,9 +79,9 @@ function App() {
         />
         <Switch>
           <Route exact path="/" component={Courses} />
-          <Route exact path="/courses/create" component={CreateCourse} />
+          <PrivateRoute exact path="/courses/create" component={CreateCourse} signedInUser={signedInUser} />
           <Route exact path="/courses/:id" component={CourseDetail} />
-          <Route path="/courses/:id/update" component={UpdateCourse} />
+          <PrivateRoute path="/courses/:id/update" component={UpdateCourse} signedInUser={signedInUser} />
           <Route
             path="/signin"
             render={() => (
