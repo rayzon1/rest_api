@@ -13,7 +13,7 @@ import UpdateCourse from "./components/UpdateCourse";
 import NotFound from "./components/NotFound";
 import Axios from "axios";
 import { setUserName, setUserPassword } from "./actions/SignInActions";
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from "./PrivateRoute";
 
 const coursesUrl = "http://localhost:5000/api/users";
 
@@ -21,6 +21,9 @@ const coursesUrl = "http://localhost:5000/api/users";
 function App() {
   const [signedInUser, setSignedInUser] = useState(null);
   const [failedSignIn, setFailedSignIn] = useState(false);
+  const [courseDetails, setCourseDetails] = useState(null);
+
+  // const [courseData, setCourseData] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -43,7 +46,7 @@ function App() {
 
     return Axios(coursesUrl, headerObject)
       .then(data => {
-        console.log(data.data.users);
+        // console.log(data.data.users);
         const authUser = data.config.auth.username;
         data.data.users.map(data => {
           if (data.emailAddress === authUser) {
@@ -66,22 +69,38 @@ function App() {
 
   const signOut = () => {
     setSignedInUser(null);
-    dispatch(setUserName(''));
-    dispatch(setUserPassword(''));
+    dispatch(setUserName(""));
+    dispatch(setUserPassword(""));
   };
 
   return (
     <Router>
       <div>
-        <Header
-          signedInUser={signedInUser}
-          signOut={signOut}
-        />
+        <Header signedInUser={signedInUser} signOut={signOut} />
         <Switch>
-          <Route exact path="/" component={Courses} />
-          <PrivateRoute exact path="/courses/create" component={CreateCourse} signedInUser={signedInUser} />
-          <Route exact path="/courses/:id" component={CourseDetail} />
-          <PrivateRoute path="/courses/:id/update" component={UpdateCourse} signedInUser={signedInUser} />
+          <Route exact path="/" render={() => <Courses />} />
+          <PrivateRoute
+            exact
+            path="/courses/create"
+            component={CreateCourse}
+            signedInUser={signedInUser}
+          />
+          <Route
+            exact
+            path="/courses/:id"
+            render={() => (
+              <CourseDetail
+                courseDetails={courseDetails}
+                setCourseDetails={setCourseDetails}
+              />
+            )}
+          />
+          <PrivateRoute
+            path="/courses/:id/update"
+            component={UpdateCourse}
+            signedInUser={signedInUser}
+            courseDetails={courseDetails}
+          />
           <Route
             path="/signin"
             render={() => (

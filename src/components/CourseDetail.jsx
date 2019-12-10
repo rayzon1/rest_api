@@ -3,8 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
-export default function CourseDetail() {
-  const [courseDetails, setCourseDetails] = useState(null);
+export default function CourseDetail({ courseDetails, setCourseDetails }) {
+  // const [courseDetails, setCourseDetails] = useState(null);
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
 
