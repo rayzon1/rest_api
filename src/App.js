@@ -92,6 +92,7 @@ function App() {
               <CourseDetail
                 courseDetails={courseDetails}
                 setCourseDetails={setCourseDetails}
+                signedInUser={signedInUser}
               />
             )}
           />

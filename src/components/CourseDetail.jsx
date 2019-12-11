@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
-export default function CourseDetail({ courseDetails, setCourseDetails }) {
+export default function CourseDetail({ courseDetails, setCourseDetails, signedInUser }) {
   // const [courseDetails, setCourseDetails] = useState(null);
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
@@ -14,7 +14,7 @@ export default function CourseDetail({ courseDetails, setCourseDetails }) {
     str.length - 1
   )}`;
 
-  const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`
+  const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`;
 
   // Fetch main course details from api.
   const fetchCourseDetail = async url => {
@@ -48,14 +48,19 @@ export default function CourseDetail({ courseDetails, setCourseDetails }) {
           <div className="actions--bar">
             <div className="bounds">
               <div className="grid-100">
-                <span>
+              {
+                signedInUser &&
+                signedInUser.emailAddress === courseDetails.user.emailAddress
+                ? (<span>
                   <Link className="button" to={courseDetailId}>
                     Update Course
                   </Link>
                   <a className="button" href="#">
                     Delete Course
                   </a>
-                </span>
+                </span>)
+                : null
+              }
                 <Link className="button button-secondary" to="/">
                   Return to List
                 </Link>
