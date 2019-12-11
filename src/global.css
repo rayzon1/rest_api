@@ -211,6 +211,11 @@ body {
   padding: 20px 0;
   margin-bottom: 30px;
 }
+
+.headerUpdate {
+  background: #57496e;
+  padding: 20px 0;
+}
 /* line 17, ../sass/global.sass */
 .header--logo {
   color: #fff;

@@ -100,6 +100,7 @@ function App() {
             path="/courses/:id/update"
             component={UpdateCourse}
             signedInUser={signedInUser}
+            signOut={signOut}
             courseDetails={courseDetails}
           />
           <Route

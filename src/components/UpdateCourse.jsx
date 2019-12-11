@@ -3,13 +3,16 @@ import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import Alert from "./Alert";
+import Header from "./Header";
 
 
-function UpdateCourse({ courseDetails, history }) {
+
+function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
   const [updateTitle, setUpdateTitle] = useState(courseDetails.title);
   const [updateDescription, setUpdateDescription] = useState(courseDetails.description);
   const [updateEstimatedTime, setUpdateEstimatedTime] = useState(courseDetails.estimatedTime);
   const [updateMaterialsNeeded, setUpdateMaterialsNeeded] = useState(courseDetails.materialsNeeded);
+  const [successAlert, setSuccessAlert] = useState(false);
 
   const signin = useSelector(state => state.SignInState);
 
@@ -46,6 +49,11 @@ function UpdateCourse({ courseDetails, history }) {
   //TODO: PROVIDE ALERT FOR UPDATE SUCCESS.
   return (
     <>
+    {/* <Header signedInUser={signedInUser} signOut={signOut} /> */}
+    {
+      successAlert &&
+      <Alert />
+    }
       <hr />
       <div className="bounds course--detail">
         <h1>Update Course</h1>
@@ -53,7 +61,8 @@ function UpdateCourse({ courseDetails, history }) {
           <form onSubmit={e => {
             e.preventDefault();
             submitForm();
-            setTimeout(() => history.goBack(), 300)
+            setSuccessAlert(true);
+            setTimeout(() => history.goBack(), 1500)
           }}>
             <div className="grid-66">
               <div className="course--header">

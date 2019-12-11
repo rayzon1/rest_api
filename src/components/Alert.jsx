@@ -1,8 +1,9 @@
 import React from 'react';
+import {Alert} from 'react-bootstrap';
 
 export default function alert() {
 
     return (
-        <h1>alert</h1>
+        <Alert variant='success'>alert</Alert>
     )
 }

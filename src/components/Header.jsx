@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Header({ signedInUser, signOut }) {
+export default function Header({ signedInUser, signOut, alias }) {
   return (
-    <div className="header">
+    <div className={ alias === "update" ? "headerUpdate" : "header"}>
       <div className="bounds">
         <h1 className="header--logo">Courses</h1>
 
