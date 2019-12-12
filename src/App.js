@@ -59,10 +59,10 @@ function App() {
           if (error.response.status === 401) {
             setFailedSignIn(true);
           }
-          console.log(error);
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
+          // console.log(error);
+          // console.log(error.response.data);
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
         }
       });
   };

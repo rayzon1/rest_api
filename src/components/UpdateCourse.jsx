@@ -4,7 +4,7 @@ import Axios from "axios";
 import { useSelector } from "react-redux";
 import Alert from "./Alert";
 import Header from "./Header";
-
+import Fade from "react-reveal/Fade";
 
 
 function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
@@ -45,14 +45,15 @@ function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
       .put(courseDetailUrl(courseDetails.id), {}, updateConfig)
       .catch(error =>  console.log(error.response))
   };
-
+  
   //TODO: PROVIDE ALERT FOR UPDATE SUCCESS.
   return (
     <>
-    {/* <Header signedInUser={signedInUser} signOut={signOut} /> */}
+
     {
+      
       successAlert &&
-      <Alert />
+      (<Fade><h2 style={{textAlign: 'center', color: 'green', left: '43%', position: 'absolute'}}>Course Updated.</h2></Fade>)
     }
       <hr />
       <div className="bounds course--detail">
