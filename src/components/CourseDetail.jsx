@@ -61,7 +61,7 @@ export default function CourseDetail({ courseDetails, setCourseDetails, signedIn
                 </span>)
                 : null
               }
-                <Link className="button button-secondary" to="/">
+                <Link className="button button-secondary" to="/" onClick={() => setCourseDetails(null)}>
                   Return to List
                 </Link>
               </div>
