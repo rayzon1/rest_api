@@ -23,8 +23,6 @@ function App() {
   const [failedSignIn, setFailedSignIn] = useState(false);
   const [courseDetails, setCourseDetails] = useState(null);
 
-  // const [courseData, setCourseData] = useState(null);
-
   const dispatch = useDispatch();
 
   const signin = useSelector(state => state.SignInState);
@@ -46,7 +44,6 @@ function App() {
 
     return Axios(coursesUrl, headerObject)
       .then(data => {
-        // console.log(data.data.users);
         const authUser = data.config.auth.username;
         data.data.users.map(data => {
           if (data.emailAddress === authUser) {
@@ -56,13 +53,10 @@ function App() {
       })
       .catch(error => {
         if (error.response) {
+          console.log(error.response);
           if (error.response.status === 401) {
             setFailedSignIn(true);
           }
-          // console.log(error);
-          // console.log(error.response.data);
-          // console.log(error.response.status);
-          // console.log(error.response.headers);
         }
       });
   };
@@ -116,8 +110,6 @@ function App() {
             )}
           />
           <Route path="/signup" component={UserSignUp} />
-          {/* <Route path="/signout" component={} /> */}
-          {/* <Route path="/signout" component={UserSignOutWithContext} /> */}
           <Route component={NotFound} />
         </Switch>
       </div>

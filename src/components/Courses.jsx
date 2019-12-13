@@ -19,6 +19,9 @@ export default function Courses() {
   // Fetch all courses in side-effect.
   useEffect(() => {
     fetchCourses(coursesUrl);
+    return () => {
+      console.log('Courses unmounted.')
+    }
   }, [])
 
 

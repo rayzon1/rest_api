@@ -6,12 +6,17 @@ import Alert from "./Alert";
 import Header from "./Header";
 import Fade from "react-reveal/Fade";
 
-
 function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
   const [updateTitle, setUpdateTitle] = useState(courseDetails.title);
-  const [updateDescription, setUpdateDescription] = useState(courseDetails.description);
-  const [updateEstimatedTime, setUpdateEstimatedTime] = useState(courseDetails.estimatedTime);
-  const [updateMaterialsNeeded, setUpdateMaterialsNeeded] = useState(courseDetails.materialsNeeded);
+  const [updateDescription, setUpdateDescription] = useState(
+    courseDetails.description
+  );
+  const [updateEstimatedTime, setUpdateEstimatedTime] = useState(
+    courseDetails.estimatedTime
+  );
+  const [updateMaterialsNeeded, setUpdateMaterialsNeeded] = useState(
+    courseDetails.materialsNeeded
+  );
   const [successAlert, setSuccessAlert] = useState(false);
 
   const signin = useSelector(state => state.SignInState);
@@ -20,8 +25,8 @@ function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
     return `http://localhost:5000/api/courses/${num}`;
   };
 
-  const str = window.location.href;
 
+  // Form submission sends put request for specific course and updates in the db.
   const submitForm = () => {
     const updateConfig = {
       headers: {
@@ -37,34 +42,45 @@ function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
       auth: {
         username: signin.username,
         password: signin.password
-      },
-      
-    }
+      }
+    };
 
-    return Axios
-      .put(courseDetailUrl(courseDetails.id), {}, updateConfig)
-      .catch(error =>  console.log(error.response))
+    return Axios.put(
+      courseDetailUrl(courseDetails.id),
+      {},
+      updateConfig
+    ).catch(error => console.log(error.response));
   };
-  
+
   //TODO: PROVIDE ALERT FOR UPDATE SUCCESS.
   return (
     <>
-
-    {
-      
-      successAlert &&
-      (<Fade><h2 style={{textAlign: 'center', color: 'green', left: '43%', position: 'absolute'}}>Course Updated.</h2></Fade>)
-    }
+      {successAlert && (
+        <Fade>
+          <h2
+            style={{
+              textAlign: "center",
+              color: "green",
+              left: "43%",
+              position: "absolute"
+            }}
+          >
+            Course Updated.
+          </h2>
+        </Fade>
+      )}
       <hr />
       <div className="bounds course--detail">
         <h1>Update Course</h1>
         <div>
-          <form onSubmit={e => {
-            e.preventDefault();
-            submitForm();
-            setSuccessAlert(true);
-            setTimeout(() => history.goBack(), 1500)
-          }}>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              submitForm();
+              setSuccessAlert(true);
+              setTimeout(() => history.goBack(), 1500);
+            }}
+          >
             <div className="grid-66">
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
@@ -128,12 +144,12 @@ function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
               <button className="button" type="submit">
                 Update Course
               </button>
-              <Link
+              <button
                 className="button button-secondary"
-                to="/" // Change to previous page not root.
+                onClick={() => history.goBack()}
               >
                 Cancel
-              </Link>
+              </button>
             </div>
           </form>
         </div>
