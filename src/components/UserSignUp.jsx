@@ -39,24 +39,29 @@ function UserSignUp({ history }) {
         console.log(error.response);
         setFailedSignUp(true);
         setErrorData(error.response.data.error);
-        
       });
+  };
+
+  const testErrorData = str => {
+    return errorData && errorData.map(data => data.includes(str)).includes(true)
+      ? { border: "1px solid red" }
+      : null;
   };
 
   const validationErrors = data => {
     return (
-      <>
+      <div >
         <h2 class="validation--errors--label">Validation errors</h2>
         <div class="validation-errors">
           <ul>
             {data.map((data, index) => (
               <li style={{ color: "red" }} key={index}>
-                {data}
+                {data.includes("value") ? null : data}
               </li>
             ))}
           </ul>
         </div>
-      </>
+      </div>
     );
   };
 
@@ -76,30 +81,17 @@ function UserSignUp({ history }) {
           </h2>
         </Fade>
       )}
-      {failedSignUp && errorData && validationErrors(errorData)}
+      
       <hr />
       <div className="bounds">
         <div className="grid-33 centered signin">
+        {failedSignUp && errorData && validationErrors(errorData)}
           <h1>Sign Up</h1>
           <div>
             <form
               onSubmit={e => {
                 e.preventDefault();
                 submitForm();
-                // setSuccessAlert(true);
-                // if (failedSignUp === false && errorData === null) {
-                //   return setTimeout(() => {
-                //     setFailedSignUp(false);
-                //     setErrorData(null);
-                //     if (history.go(-1)) {
-                //       history.goBack();
-                //     } else {
-                //       history.push("/");
-                //     }
-                //   }, 1500);
-                // } else {
-                //   return;
-                // }
               }}
             >
               <div>
@@ -109,6 +101,7 @@ function UserSignUp({ history }) {
                   type="text"
                   className=""
                   placeholder="First Name"
+                  style={testErrorData('first')}
                   onChange={e => setFirstName(e.target.value)}
                 />
               </div>
@@ -119,6 +112,7 @@ function UserSignUp({ history }) {
                   type="text"
                   className=""
                   placeholder="Last Name"
+                  style={testErrorData('last')}
                   onChange={e => setLastName(e.target.value)}
                 />
               </div>
@@ -129,6 +123,7 @@ function UserSignUp({ history }) {
                   type="text"
                   className=""
                   placeholder="Email Address"
+                  style={testErrorData('email')}
                   onChange={e => setEmailAddress(e.target.value)}
                 />
               </div>
@@ -139,6 +134,7 @@ function UserSignUp({ history }) {
                   type="password"
                   className=""
                   placeholder="Password"
+                  style={testErrorData('password')}
                   onChange={e => setPassword(e.target.value)}
                 />
               </div>
@@ -149,6 +145,7 @@ function UserSignUp({ history }) {
                   type="password"
                   className=""
                   placeholder="Confirm Password"
+                  style={testErrorData('password')}
                   onChange={e => setConfirmPassword(e.target.value)}
                 />
               </div>
