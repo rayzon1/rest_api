@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import "./global.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -14,8 +14,9 @@ import NotFound from "./components/NotFound";
 import Axios from "axios";
 import { setUserName, setUserPassword } from "./actions/SignInActions";
 import PrivateRoute from "./PrivateRoute";
+import Cookies from 'js-cookie';
 
-const coursesUrl = "http://localhost:5000/api/users";
+
 
 // Main container for routes to all components.
 function App() {
@@ -23,10 +24,19 @@ function App() {
   const [failedSignIn, setFailedSignIn] = useState(false);
   const [courseDetails, setCourseDetails] = useState(null);
 
+  // const signedInUser = Cookies.getJSON('authenticatedUser') || null;
+
+  useEffect(() => {
+    if (signedInUser) {
+      Cookies.set('authenticatedUser', JSON.stringify(signedInUser), { expires: 5 });
+    }
+  }, [signedInUser])
+
   const dispatch = useDispatch();
 
   const signin = useSelector(state => state.SignInState);
 
+  const coursesUrl = "http://localhost:5000/api/users";
   // SignIn function will authorize user with api and save auth credentials to state.
   const signIn = () => {
     // Headers and auth headers for the request.
@@ -48,6 +58,8 @@ function App() {
         data.data.users.map(data => {
           if (data.emailAddress === authUser) {
             setSignedInUser(data);
+            // Cookies.set('authenticatedUser', JSON.stringify(data), { expires: 5 });
+            // setSignedInUserCookie(Cookies.getJSON('authenticatedUser') || null);
           }
         });
       })
@@ -62,9 +74,11 @@ function App() {
   };
 
   const signOut = () => {
-    setSignedInUser(null);
+    // setSignedInUser(null);
+    
     dispatch(setUserName(""));
     dispatch(setUserPassword(""));
+    Cookies.remove('authenticatedUser');
   };
 
   return (

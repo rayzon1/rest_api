@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 export default function CourseDetail({ courseDetails, setCourseDetails, signedInUser }) {
-  // const [courseDetails, setCourseDetails] = useState(null);
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
 

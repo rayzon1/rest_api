@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function CreateCourse() {
+export default function CreateCourse({ signedInUser }) {
 
   // Commented section will be to display error messages.
   return (
@@ -31,7 +31,7 @@ export default function CreateCourse() {
                   className="input-title course--title--input"
                   placeholder="Course title..."
                 />
-                <p>By Joe Smith</p>
+                <p>{`By ${signedInUser.firstName} ${signedInUser.lastName}`}</p>
               </div>
               <div className="course--description">
                 <div>

@@ -1,15 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 export default function Header({ signedInUser, signOut, alias }) {
+
+  const signedInUserCookie = Cookies.getJSON('authenticatedUser') || null;
   return (
     <div className={ alias === "update" ? "headerUpdate" : "header"}>
       <div className="bounds">
         <h1 className="header--logo">Courses</h1>
 
-        {signedInUser ? (
+        {signedInUserCookie && signedInUserCookie ? (
           <nav>
-            <span>{`Welcome ${signedInUser.firstName} ${signedInUser.lastName}!`}</span>
+            <span>{`Welcome ${signedInUserCookie.firstName} ${signedInUserCookie.lastName}!`}</span>
             <Link
               className="signout"
               to="/"
@@ -25,7 +28,7 @@ export default function Header({ signedInUser, signOut, alias }) {
             <Link className="signup" to="/signup">
               Sign Up
             </Link>
-            <Link className="signin" to="/signin">
+            <Link className="signin" to="/signin" >
               Sign In
             </Link>
           </nav>

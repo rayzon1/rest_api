@@ -3,7 +3,6 @@ import { Link, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserName, setUserPassword } from "../actions/SignInActions";
 
-
 function UserSignIn({
   signIn,
   signedInUser,
@@ -11,17 +10,15 @@ function UserSignIn({
   failedSignIn,
   setFailedSignIn
 }) {
-
   const dispatch = useDispatch();
 
   const signInState = useSelector(state => state);
 
   useEffect(() => {
     if (signedInUser) {
-      history.push('/');
+      history.push("/");
     }
   }, [signedInUser]);
-
 
   const validationErrors = () => {
     return (
@@ -29,7 +26,9 @@ function UserSignIn({
         <h2 class="validation--errors--label">Validation errors</h2>
         <div class="validation-errors">
           <ul>
-            <li style={{ color: 'red' }}>Email address and/or password is incorrect.</li>
+            <li style={{ color: "red" }}>
+              Email address and/or password is incorrect.
+            </li>
           </ul>
         </div>
       </>
@@ -49,6 +48,13 @@ function UserSignIn({
               onSubmit={e => {
                 e.preventDefault();
                 signIn();
+                setTimeout(() => {
+                  if (history.go(-1)) {
+                    history.goBack();
+                  } else {
+                    history.push("/");
+                  }
+                }, 1500);
               }}
             >
               <div>
@@ -58,7 +64,7 @@ function UserSignIn({
                   type="text"
                   className=""
                   placeholder="Email Address"
-                  style={failedSignIn ? { border: '1px solid red' } : null}
+                  style={failedSignIn ? { border: "1px solid red" } : null}
                   onChange={e => {
                     setFailedSignIn(false);
                     dispatch(setUserName(e.target.value));
@@ -72,7 +78,7 @@ function UserSignIn({
                   type="password"
                   className=""
                   placeholder="Password"
-                  style={failedSignIn ? { border: '1px solid red' } : null}
+                  style={failedSignIn ? { border: "1px solid red" } : null}
                   onChange={e => {
                     setFailedSignIn(false);
                     dispatch(setUserPassword(e.target.value));
