@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import "./global.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -14,31 +14,28 @@ import NotFound from "./components/NotFound";
 import Axios from "axios";
 import { setUserName, setUserPassword } from "./actions/SignInActions";
 import PrivateRoute from "./PrivateRoute";
-import Cookies from 'js-cookie';
-
-
+import Cookies from "js-cookie";
 
 // Main container for routes to all components.
 function App() {
-  const [signedInUser, setSignedInUser] = useState(null);
+  const [signedInUser, setSignedInUser] = useState(
+    Cookies.getJSON("authenticatedUser") || null
+  );
   const [failedSignIn, setFailedSignIn] = useState(false);
   const [courseDetails, setCourseDetails] = useState(null);
 
   // const signedInUser = Cookies.getJSON('authenticatedUser') || null;
-
-  useEffect(() => {
-    if (signedInUser) {
-      Cookies.set('authenticatedUser', JSON.stringify(signedInUser), { expires: 5 });
-    }
-  }, [signedInUser])
 
   const dispatch = useDispatch();
 
   const signin = useSelector(state => state.SignInState);
 
   const coursesUrl = "http://localhost:5000/api/users";
+
   // SignIn function will authorize user with api and save auth credentials to state.
-  const signIn = () => {
+  // @param { history } for redirection.
+  const signIn = async (a) => {
+
     // Headers and auth headers for the request.
     const headerObject = {
       method: "get",
@@ -52,34 +49,54 @@ function App() {
       }
     };
 
-    return Axios(coursesUrl, headerObject)
-      .then(data => {
-        const authUser = data.config.auth.username;
-        data.data.users.map(data => {
-          if (data.emailAddress === authUser) {
-            setSignedInUser(data);
-            // Cookies.set('authenticatedUser', JSON.stringify(data), { expires: 5 });
-            // setSignedInUserCookie(Cookies.getJSON('authenticatedUser') || null);
-          }
-        });
-      })
-      .catch(error => {
-        if (error.response) {
-          console.log(error.response);
-          if (error.response.status === 401) {
-            setFailedSignIn(true);
-          }
+    try {
+      const data = await Axios(coursesUrl, headerObject);
+      const authUser = data.config.auth.username;
+      data.data.users.map(data_1 => {
+        if (data_1.emailAddress === authUser) {
+          Cookies.set(
+            "authenticatedUser",
+            JSON.stringify(
+              Object.assign(data_1, { password: signin.password })
+            ),
+            { expires: 5 }
+          );
+          setSignedInUser(data_1);
+            if (a.go(-1)) {
+              a.goBack();
+            } else {
+              a.push("/");
+            }
         }
+        // return null;
       });
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+        if (error.response.status === 401) {
+          setFailedSignIn(true);
+        }
+      }
+    }
   };
 
   const signOut = () => {
-    // setSignedInUser(null);
-    
+    Cookies.remove("authenticatedUser");
+    setSignedInUser(null);
     dispatch(setUserName(""));
     dispatch(setUserPassword(""));
-    Cookies.remove('authenticatedUser');
   };
+
+  // Props for course paths.
+  const coursesPropsObj = {
+    signedInUser,
+    signIn,
+    courseDetails,
+    setCourseDetails,
+    failedSignIn,
+    setFailedSignIn,
+    signOut
+  }
 
   return (
     <Router>
@@ -98,28 +115,21 @@ function App() {
             path="/courses/:id"
             render={() => (
               <CourseDetail
-                courseDetails={courseDetails}
-                setCourseDetails={setCourseDetails}
-                signedInUser={signedInUser}
+                coursesPropsObj={coursesPropsObj}
               />
             )}
           />
           <PrivateRoute
             path="/courses/:id/update"
             component={UpdateCourse}
-            signedInUser={signedInUser}
-            signOut={signOut}
-            courseDetails={courseDetails}
+            coursesPropsObj={coursesPropsObj}
           />
           <Route
             path="/signin"
             render={() => (
               <UserSignIn
                 dispatch={dispatch}
-                signIn={signIn}
-                signedInUser={signedInUser}
-                failedSignIn={failedSignIn}
-                setFailedSignIn={setFailedSignIn}
+                coursesPropsObj={coursesPropsObj}
               />
             )}
           />

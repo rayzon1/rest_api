@@ -4,15 +4,15 @@ import Cookies from 'js-cookie';
 
 export default function Header({ signedInUser, signOut, alias }) {
 
-  const signedInUserCookie = Cookies.getJSON('authenticatedUser') || null;
+  // const signedInUserCookie = Cookies.getJSON('authenticatedUser') || null;
+  
   return (
     <div className={ alias === "update" ? "headerUpdate" : "header"}>
       <div className="bounds">
         <h1 className="header--logo">Courses</h1>
-
-        {signedInUserCookie && signedInUserCookie ? (
+        {signedInUser && signedInUser ? (
           <nav>
-            <span>{`Welcome ${signedInUserCookie.firstName} ${signedInUserCookie.lastName}!`}</span>
+            <span>{`Welcome ${signedInUser.firstName} ${signedInUser.lastName}!`}</span>
             <Link
               className="signout"
               to="/"

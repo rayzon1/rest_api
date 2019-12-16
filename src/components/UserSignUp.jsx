@@ -42,6 +42,8 @@ function UserSignUp({ history }) {
       });
   };
 
+  // Tests the error data brought back from api to see if it will match the input.
+  // e.g. If error string contains value param it will show that error on page.
   const testErrorData = str => {
     return errorData && errorData.map(data => data.includes(str)).includes(true)
       ? { border: "1px solid red" }
@@ -123,7 +125,7 @@ function UserSignUp({ history }) {
                   type="text"
                   className=""
                   placeholder="Email Address"
-                  style={testErrorData('email')}
+                  style={testErrorData('email') || testErrorData('E-mail')}
                   onChange={e => setEmailAddress(e.target.value)}
                 />
               </div>

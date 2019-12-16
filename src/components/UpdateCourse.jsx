@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
-import Alert from "./Alert";
-import Header from "./Header";
 import Fade from "react-reveal/Fade";
 
-function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
+function UpdateCourse({ coursesPropsObj, history }) {
+  const { courseDetails, signedInUser} = coursesPropsObj;
+
   const [updateTitle, setUpdateTitle] = useState(courseDetails.title);
   const [updateDescription, setUpdateDescription] = useState(
     courseDetails.description
@@ -25,9 +25,8 @@ function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
     return `http://localhost:5000/api/courses/${num}`;
   };
 
-
   // Form submission sends put request for specific course and updates in the db.
-  const submitForm = () => {
+  const submitForm = async () => {
     const updateConfig = {
       headers: {
         Accept: "application/json",
@@ -40,16 +39,17 @@ function UpdateCourse({ courseDetails, signedInUser, signOut, history }) {
         materialsNeeded: updateMaterialsNeeded
       },
       auth: {
-        username: signin.username,
-        password: signin.password
+        username: signin.username || signedInUser.emailAddress,
+        password: signin.password || signedInUser.password
       }
     };
 
-    return Axios.put(
-      courseDetailUrl(courseDetails.id),
-      {},
-      updateConfig
-    ).catch(error => console.log(error.response));
+    try {
+      return Axios.put(courseDetailUrl(courseDetails.id), {}, updateConfig);
+    }
+    catch (error) {
+      return console.log(error.response);
+    }
   };
 
   //TODO: PROVIDE ALERT FOR UPDATE SUCCESS.

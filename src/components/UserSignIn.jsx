@@ -1,28 +1,21 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUserName, setUserPassword } from "../actions/SignInActions";
+import Jump from "react-reveal/Jump";
 
 function UserSignIn({
-  signIn,
-  signedInUser,
+
   history,
-  failedSignIn,
-  setFailedSignIn
+ 
+  coursesPropsObj
 }) {
   const dispatch = useDispatch();
-
-  const signInState = useSelector(state => state);
-
-  useEffect(() => {
-    if (signedInUser) {
-      history.push("/");
-    }
-  }, [signedInUser]);
+  const { signIn, signedInUser, failedSignIn, setFailedSignIn } = coursesPropsObj;
 
   const validationErrors = () => {
     return (
-      <>
+      <Jump>
         <h2 class="validation--errors--label">Validation errors</h2>
         <div class="validation-errors">
           <ul>
@@ -31,7 +24,7 @@ function UserSignIn({
             </li>
           </ul>
         </div>
-      </>
+      </Jump>
     );
   };
 
@@ -47,14 +40,7 @@ function UserSignIn({
             <form
               onSubmit={e => {
                 e.preventDefault();
-                signIn();
-                setTimeout(() => {
-                  if (history.go(-1)) {
-                    history.goBack();
-                  } else {
-                    history.push("/");
-                  }
-                }, 1500);
+                signIn(history);
               }}
             >
               <div>

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
-export default function CourseDetail({ courseDetails, setCourseDetails, signedInUser }) {
+export default function CourseDetail({ coursesPropsObj }) {
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
 
@@ -15,11 +15,21 @@ export default function CourseDetail({ courseDetails, setCourseDetails, signedIn
 
   const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`;
 
+  const { courseDetails, setCourseDetails, signedInUser } = coursesPropsObj;
+
   // Fetch main course details from api.
-  const fetchCourseDetail = async url => {
-    const course = await axios.get(url);
-    setCourseDetails(course.data);
-  };
+  // const fetchCourseDetail = async url => {
+  //   const course = await axios.get(url);
+  //   setCourseDetails(course.data);
+  // };
+
+  const fetchCourseDetail = useCallback(
+    async url => {
+      const course = await axios.get(url);
+      setCourseDetails(course.data);
+    }, 
+    [setCourseDetails]
+  )
 
   // Creates course details such as description and materials needed.
   const createCourseDetails = (data, func, cat) => {
@@ -28,7 +38,10 @@ export default function CourseDetail({ courseDetails, setCourseDetails, signedIn
 
   useEffect(() => {
     fetchCourseDetail(courseDetailUrl);
-  }, [courseDetailUrl]);
+    return () => {
+      console.log('course detail unmounted.')
+    }
+  }, [courseDetailUrl, fetchCourseDetail]);
 
   useEffect(() => {
     createCourseDetails(courseDetails, setCourseDescription, "description");
