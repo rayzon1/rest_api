@@ -1,8 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Axios from 'axios';
 
-export default function CreateCourse({ signedInUser }) {
+export default function CreateCourse({ coursesPropsObj }) {
 
+  const { signedInUser, signin } = coursesPropsObj;
+  const [courseTitle, setCourseTitle] = useState('');
+  const [courseDescription, setCourseDescription] = useState('');
+  const [courseEstimatedTime, setCourseEstimatedTime] = useState('');
+  const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState('');
+
+  const courseUrl = 'http://localhost:5000/api/courses'
+
+  console.log(signedInUser);
+
+  const submitForm = () => {
+
+    const headerConfig = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      data: {
+        title: courseTitle,
+        description: courseDescription,
+        estimatedTime: courseEstimatedTime,
+        materialsNeeded: courseMaterialsNeeded,
+        userId: signedInUser.id,
+      },
+      auth: {
+        username: signin && signin.username || signedInUser.emailAddress,
+        password: signin && signin.password || signedInUser.password
+      }
+    }
+
+    try {
+      return Axios.post(courseUrl, {}, headerConfig);
+    }
+    catch (error) {
+      return console.log(error.response);
+    }
+
+  }
+ 
   // Commented section will be to display error messages.
   return (
     <div className="bounds course--detail">
@@ -18,6 +58,7 @@ export default function CreateCourse({ signedInUser }) {
         </div> */}
         <form onSubmit={e => {
           e.preventDefault();
+          submitForm();
           console.log('submitted');
           }}>
           <div className="grid-66">
@@ -30,6 +71,7 @@ export default function CreateCourse({ signedInUser }) {
                   type="text"
                   className="input-title course--title--input"
                   placeholder="Course title..."
+                  onChange={e => setCourseTitle(e.target.value)}
                 />
                 <p>{`By ${signedInUser.firstName} ${signedInUser.lastName}`}</p>
               </div>
@@ -40,6 +82,7 @@ export default function CreateCourse({ signedInUser }) {
                     name="description"
                     className=""
                     placeholder="Course description..."
+                    onChange={e => setCourseDescription(e.target.value)}
                   ></textarea>
                 </div>
               </div>
@@ -57,6 +100,7 @@ export default function CreateCourse({ signedInUser }) {
                       type="text"
                       className="course--time--input"
                       placeholder="Hours"
+                      onChange={e => setCourseEstimatedTime(e.target.value)}
                     />
                   </div>
                 </li>
@@ -68,6 +112,7 @@ export default function CreateCourse({ signedInUser }) {
                       name="materialsNeeded"
                       className=""
                       placeholder="List materials..."
+                      onChange={e => setCourseMaterialsNeeded(e.target.value)}
                     ></textarea>
                   </div>
                 </li>

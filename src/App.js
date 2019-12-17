@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import "./global.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "./components/Header";
 import Courses from "./components/Courses";
@@ -23,6 +23,7 @@ function App() {
   );
   const [failedSignIn, setFailedSignIn] = useState(false);
   const [courseDetails, setCourseDetails] = useState(null);
+  // const [courseData, setCourseData] = useState(null);
 
   // const signedInUser = Cookies.getJSON('authenticatedUser') || null;
 
@@ -68,7 +69,6 @@ function App() {
               a.push("/");
             }
         }
-        // return null;
       });
     } catch (error) {
       if (error.response) {
@@ -95,7 +95,7 @@ function App() {
     setCourseDetails,
     failedSignIn,
     setFailedSignIn,
-    signOut
+    signOut,
   }
 
   return (
@@ -108,7 +108,7 @@ function App() {
             exact
             path="/courses/create"
             component={CreateCourse}
-            signedInUser={signedInUser}
+            coursesPropsObj={coursesPropsObj}
           />
           <Route
             exact
@@ -134,7 +134,8 @@ function App() {
             )}
           />
           <Route path="/signup" component={UserSignUp} />
-          <Route component={NotFound} />
+          <Route path="/notfound" component={NotFound} />
+          <Redirect to='/notfound' />
         </Switch>
       </div>
     </Router>

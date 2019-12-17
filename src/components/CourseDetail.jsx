@@ -1,32 +1,34 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams, withRouter } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
-export default function CourseDetail({ coursesPropsObj }) {
+function CourseDetail({ coursesPropsObj, history }) {
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
 
-  const str = window.location.href;
+  const { courseDetails, setCourseDetails, signedInUser, courseData, setCourseData } = coursesPropsObj;
 
+  const str = window.location.href;
+  let { id } = useParams();
+
+  // console.log(id);
+  // console.log(courseData);
   const courseDetailUrl = `http://localhost:5000/api/courses/${str.charAt(
     str.length - 1
   )}`;
 
   const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`;
 
-  const { courseDetails, setCourseDetails, signedInUser } = coursesPropsObj;
-
-  // Fetch main course details from api.
-  // const fetchCourseDetail = async url => {
-  //   const course = await axios.get(url);
-  //   setCourseDetails(course.data);
-  // };
 
   const fetchCourseDetail = useCallback(
     async url => {
-      const course = await axios.get(url);
-      setCourseDetails(course.data);
+      try {
+        const course = await axios.get(url);
+        setCourseDetails(course.data);
+      } catch (error) {
+        return history.push('/notfound');
+      }
     }, 
     [setCourseDetails]
   )
@@ -51,6 +53,7 @@ export default function CourseDetail({ coursesPropsObj }) {
       "materialsNeeded"
     );
   }, [courseDetails]);
+
 
   return (
     courseDetails && (
@@ -118,3 +121,5 @@ export default function CourseDetail({ coursesPropsObj }) {
     )
   );
 }
+
+export default withRouter(CourseDetail);
