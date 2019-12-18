@@ -18,6 +18,7 @@ import Cookies from "js-cookie";
 
 // Main container for routes to all components.
 function App() {
+  const signin = useSelector(state => state.SignInState);
   const [signedInUser, setSignedInUser] = useState(
     Cookies.getJSON("authenticatedUser") || null
   );
@@ -28,8 +29,6 @@ function App() {
   // const signedInUser = Cookies.getJSON('authenticatedUser') || null;
 
   const dispatch = useDispatch();
-
-  const signin = useSelector(state => state.SignInState);
 
   const coursesUrl = "http://localhost:5000/api/users";
 

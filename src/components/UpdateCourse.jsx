@@ -1,23 +1,33 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import Fade from "react-reveal/Fade";
+import ValidationErrors from './ValidationErrors';
 
+// TODO: Refactor component to fetch its own data from api. Populating from state causes error when reloading.
 function UpdateCourse({ coursesPropsObj, history }) {
+  let { id } = useParams(); // Use id to fetch details from api, i.e (coursedetails)
   const { courseDetails, signedInUser} = coursesPropsObj;
 
-  const [updateTitle, setUpdateTitle] = useState(courseDetails.title);
+  if(courseDetails === null) {
+    history.goBack();
+    console.log(id);
+  }
+
+  const [updateTitle, setUpdateTitle] = useState(courseDetails && courseDetails.title);
   const [updateDescription, setUpdateDescription] = useState(
-    courseDetails.description
+    courseDetails && courseDetails.description
   );
   const [updateEstimatedTime, setUpdateEstimatedTime] = useState(
-    courseDetails.estimatedTime
+    courseDetails && courseDetails.estimatedTime
   );
   const [updateMaterialsNeeded, setUpdateMaterialsNeeded] = useState(
-    courseDetails.materialsNeeded
+    courseDetails && courseDetails.materialsNeeded
   );
   const [successAlert, setSuccessAlert] = useState(false);
+  const [errorData, setErrorData] = useState(null);
+  const [failedUpdate, setFailedUpdate] = useState(false);
 
   const signin = useSelector(state => state.SignInState);
 
@@ -45,17 +55,29 @@ function UpdateCourse({ coursesPropsObj, history }) {
     };
 
     try {
-      return Axios.put(courseDetailUrl(courseDetails.id), {}, updateConfig);
+       await Axios.put(courseDetailUrl(courseDetails.id), {}, updateConfig);
+      
+       //TODO: put in useeffect state.
+        // setTimeout(() => {
+        //   if (history.go(-1)) {
+        //     history.goBack();
+        //   } else {
+        //     history.push("/");
+        //   }
+        // }, 1500);
+
     }
     catch (error) {
-      return console.log(error.response);
+      console.log(error.response);
+      setErrorData(error.response.data.error);
+      setFailedUpdate(true);
     }
   };
 
   //TODO: PROVIDE ALERT FOR UPDATE SUCCESS.
   return (
     <>
-      {successAlert && (
+      {successAlert && failedUpdate == false && (
         <Fade>
           <h2
             style={{
@@ -69,19 +91,26 @@ function UpdateCourse({ coursesPropsObj, history }) {
           </h2>
         </Fade>
       )}
+      
       <hr />
+      
       <div className="bounds course--detail">
+      
         <h1>Update Course</h1>
         <div>
           <form
             onSubmit={e => {
               e.preventDefault();
+              setErrorData(null);
+              setFailedUpdate(false);
               submitForm();
               setSuccessAlert(true);
-              setTimeout(() => history.goBack(), 1500);
+              // setTimeout(() => history.goBack(), 1500);
+              
             }}
           >
             <div className="grid-66">
+            {failedUpdate && errorData && <ValidationErrors data={errorData} style={{textAlign: 'center'}}/>}
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
                 <div>
@@ -94,7 +123,7 @@ function UpdateCourse({ coursesPropsObj, history }) {
                     onChange={e => setUpdateTitle(e.target.value)}
                   />
                 </div>
-                <p>{`By ${courseDetails.user.firstName} ${courseDetails.user.lastName}`}</p>
+                <p>{`By ${courseDetails && courseDetails.user.firstName} ${courseDetails && courseDetails.user.lastName}`}</p>
               </div>
               <div className="course--description">
                 <div>
@@ -145,6 +174,7 @@ function UpdateCourse({ coursesPropsObj, history }) {
                 Update Course
               </button>
               <button
+                type="cancel"
                 className="button button-secondary"
                 onClick={() => history.goBack()}
               >

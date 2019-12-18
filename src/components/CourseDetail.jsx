@@ -20,7 +20,7 @@ function CourseDetail({ coursesPropsObj, history }) {
 
   const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`;
 
-
+  //Put in exports.
   const fetchCourseDetail = useCallback(
     async url => {
       try {

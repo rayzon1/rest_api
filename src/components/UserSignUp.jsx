@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
 import Fade from "react-reveal/Fade";
+import ValidationErrors from "./ValidationErrors";
 
 const url = "http://localhost:5000/api/users";
 
@@ -50,23 +51,6 @@ function UserSignUp({ history }) {
       : null;
   };
 
-  const validationErrors = data => {
-    return (
-      <div >
-        <h2 class="validation--errors--label">Validation errors</h2>
-        <div class="validation-errors">
-          <ul>
-            {data.map((data, index) => (
-              <li style={{ color: "red" }} key={index}>
-                {data.includes("value") ? null : data}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <>
       {successAlert && failedSignUp === false && (
@@ -87,7 +71,7 @@ function UserSignUp({ history }) {
       <hr />
       <div className="bounds">
         <div className="grid-33 centered signin">
-        {failedSignUp && errorData && validationErrors(errorData)}
+        {failedSignUp && errorData && <ValidationErrors data={errorData} />}
           <h1>Sign Up</h1>
           <div>
             <form
