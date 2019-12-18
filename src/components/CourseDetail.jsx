@@ -2,25 +2,30 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Link, useParams, withRouter } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import { useFetch } from "../hooks/useFetch";
 
 function CourseDetail({ coursesPropsObj, history }) {
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
 
-  const { courseDetails, setCourseDetails, signedInUser, courseData, setCourseData } = coursesPropsObj;
+  
+
+  const { setCourseDetails, signedInUser, courseData, setCourseData } = coursesPropsObj;
 
   const str = window.location.href;
-  let { id } = useParams();
+  const { id } = useParams();
 
   // console.log(id);
   // console.log(courseData);
-  const courseDetailUrl = `http://localhost:5000/api/courses/${str.charAt(
-    str.length - 1
-  )}`;
+  const courseDetailUrl = `http://localhost:5000/api/courses/${id}`;
 
-  const courseDetailId = `/courses/${str.charAt(str.length-1)}/update`;
+  const courseDetailId = `/courses/${id}/update`;
 
-  //Put in exports.
+  const {response, error, isLoading} = useFetch(courseDetailUrl, {method: "get"});
+  
+  const courseDetails = response;
+  
+ //TODO: Erase this when done refactoring
   const fetchCourseDetail = useCallback(
     async url => {
       try {
