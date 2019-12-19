@@ -3,8 +3,8 @@ import React from 'react';
 export default function validationErrors({ data }) {
     return (
       <div >
-        <h2 class="validation--errors--label">Validation errors</h2>
-        <div class="validation-errors">
+        <h2 className="validation--errors--label">Validation errors</h2>
+        <div className="validation-errors">
           <ul>
             {data.map((data, index) => (
               <li style={{ color: "red" }} key={index}>

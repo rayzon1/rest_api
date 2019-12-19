@@ -16,9 +16,11 @@ import { setUserName, setUserPassword } from "./actions/SignInActions";
 import PrivateRoute from "./PrivateRoute";
 import Cookies from "js-cookie";
 
+
 // Main container for routes to all components.
 function App() {
   const signin = useSelector(state => state.SignInState);
+ 
   const [signedInUser, setSignedInUser] = useState(
     Cookies.getJSON("authenticatedUser") || null
   );
@@ -31,6 +33,8 @@ function App() {
   const dispatch = useDispatch();
 
   const coursesUrl = "http://localhost:5000/api/users";
+
+
 
   // SignIn function will authorize user with api and save auth credentials to state.
   // @param { history } for redirection.

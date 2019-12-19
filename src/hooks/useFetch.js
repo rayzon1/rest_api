@@ -11,10 +11,11 @@ export const useFetch = (url, options) => {
         async (url, opt) => {
             setIsLoading(true);
           try {
-            const course = await axios(url, opt);
+            const course = await axios(url, {}, opt);
             setResponse(course.data);
             setIsLoading(false);
           } catch (error) {
+            console.log(error.response);
             setError(error.response);
           }
         }, 

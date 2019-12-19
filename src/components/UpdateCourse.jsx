@@ -1,39 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import Fade from "react-reveal/Fade";
 import ValidationErrors from './ValidationErrors';
+import { useFetch } from "../hooks/useFetch";
 
 // TODO: Refactor component to fetch its own data from api. Populating from state causes error when reloading.
 function UpdateCourse({ coursesPropsObj, history }) {
   let { id } = useParams(); // Use id to fetch details from api, i.e (coursedetails)
-  const { courseDetails, signedInUser} = coursesPropsObj;
+  const { signedInUser} = coursesPropsObj;
+  const courseDetailUrl = `http://localhost:5000/api/courses/${id}`;
 
-  if(courseDetails === null) {
-    history.goBack();
-    console.log(id);
-  }
+  const {response, error, isLoading} = useFetch(courseDetailUrl, {method: "get"});
+  
+  const courseDetails = response;
 
-  const [updateTitle, setUpdateTitle] = useState(courseDetails && courseDetails.title);
-  const [updateDescription, setUpdateDescription] = useState(
-    courseDetails && courseDetails.description
-  );
-  const [updateEstimatedTime, setUpdateEstimatedTime] = useState(
-    courseDetails && courseDetails.estimatedTime
-  );
-  const [updateMaterialsNeeded, setUpdateMaterialsNeeded] = useState(
-    courseDetails && courseDetails.materialsNeeded
-  );
+  const [updateTitle, setUpdateTitle] = useState('');
+  const [updateDescription, setUpdateDescription] = useState('');
+  const [updateEstimatedTime, setUpdateEstimatedTime] = useState('');
+  const [updateMaterialsNeeded, setUpdateMaterialsNeeded] = useState('');
   const [successAlert, setSuccessAlert] = useState(false);
   const [errorData, setErrorData] = useState(null);
   const [failedUpdate, setFailedUpdate] = useState(false);
 
   const signin = useSelector(state => state.SignInState);
 
-  const courseDetailUrl = num => {
-    return `http://localhost:5000/api/courses/${num}`;
-  };
+  useEffect(() => {
+    if(courseDetails){
+      setUpdateTitle(courseDetails.title);
+      setUpdateDescription(courseDetails.description);
+      setUpdateEstimatedTime(courseDetails.estimatedTime);
+      setUpdateMaterialsNeeded(courseDetails.materialsNeeded )
+    }
+  }, [courseDetails])
 
   // Form submission sends put request for specific course and updates in the db.
   const submitForm = async () => {
@@ -55,16 +55,16 @@ function UpdateCourse({ coursesPropsObj, history }) {
     };
 
     try {
-       await Axios.put(courseDetailUrl(courseDetails.id), {}, updateConfig);
+       await Axios.put(courseDetailUrl, {}, updateConfig);
       
        //TODO: put in useeffect state.
-        // setTimeout(() => {
-        //   if (history.go(-1)) {
-        //     history.goBack();
-        //   } else {
-        //     history.push("/");
-        //   }
-        // }, 1500);
+        setTimeout(() => {
+          if (history.go(-1)) {
+            history.goBack();
+          } else {
+            history.push("/");
+          }
+        }, 1500);
 
     }
     catch (error) {
@@ -76,7 +76,8 @@ function UpdateCourse({ coursesPropsObj, history }) {
 
   //TODO: PROVIDE ALERT FOR UPDATE SUCCESS.
   return (
-    <>
+
+    courseDetails && (<>
       {successAlert && failedUpdate == false && (
         <Fade>
           <h2
@@ -123,7 +124,7 @@ function UpdateCourse({ coursesPropsObj, history }) {
                     onChange={e => setUpdateTitle(e.target.value)}
                   />
                 </div>
-                <p>{`By ${courseDetails && courseDetails.user.firstName} ${courseDetails && courseDetails.user.lastName}`}</p>
+                <p>{`By ${courseDetails.user.firstName} ${courseDetails.user.lastName}`}</p>
               </div>
               <div className="course--description">
                 <div>
@@ -176,7 +177,10 @@ function UpdateCourse({ coursesPropsObj, history }) {
               <button
                 type="cancel"
                 className="button button-secondary"
-                onClick={() => history.goBack()}
+                onClick={e => {
+                  e.preventDefault();
+                  history.goBack();
+                }}
               >
                 Cancel
               </button>
@@ -184,7 +188,7 @@ function UpdateCourse({ coursesPropsObj, history }) {
           </form>
         </div>
       </div>
-    </>
+    </>)
   );
 }
 

@@ -7,16 +7,10 @@ import { useFetch } from "../hooks/useFetch";
 function CourseDetail({ coursesPropsObj, history }) {
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
-
-  
-
   const { setCourseDetails, signedInUser, courseData, setCourseData } = coursesPropsObj;
 
-  const str = window.location.href;
   const { id } = useParams();
 
-  // console.log(id);
-  // console.log(courseData);
   const courseDetailUrl = `http://localhost:5000/api/courses/${id}`;
 
   const courseDetailId = `/courses/${id}/update`;
