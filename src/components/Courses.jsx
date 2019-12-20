@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CourseButtons from "./CourseButtons";
-import axios from 'axios';
 import { Link } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
 
 export default function Courses() {
   // API Url for for courses.
@@ -10,19 +10,15 @@ export default function Courses() {
   // Local component state for course data.
   const [courseData, setCourseData] = useState(null);
 
-  // Function to fetch courses from API.
-  const fetchCourses = async url => {
-    const courses = await axios.get(url);
-    setCourseData(courses.data);
-  }
+  const { response, error, isLoading } = useFetch(coursesUrl, { method: "get" })
 
   // Fetch all courses in side-effect.
   useEffect(() => {
-    fetchCourses(coursesUrl);
+    setCourseData(response);
     return () => {
-      console.log('Courses unmounted.')
+      console.log("component unmounted.")
     }
-  }, [])
+  }, [response])
 
 
   return (

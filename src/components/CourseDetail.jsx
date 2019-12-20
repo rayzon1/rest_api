@@ -7,7 +7,7 @@ import { useFetch } from "../hooks/useFetch";
 function CourseDetail({ coursesPropsObj, history }) {
   const [courseDescription, setCourseDescription] = useState(null);
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState(null);
-  const { setCourseDetails, signedInUser, courseData, setCourseData } = coursesPropsObj;
+  const { setCourseDetails, signedInUser} = coursesPropsObj;
 
   const { id } = useParams();
 

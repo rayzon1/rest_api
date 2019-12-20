@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
 import Fade from "react-reveal/Fade";
+import ValidationErrors from './ValidationErrors';
 
 function CreateCourse({ coursesPropsObj, history }) {
   const { signedInUser, signin } = coursesPropsObj;
@@ -11,6 +12,8 @@ function CreateCourse({ coursesPropsObj, history }) {
   const [courseMaterialsNeeded, setCourseMaterialsNeeded] = useState("");
 
   const [successAlert, setSuccessAlert] = useState(false);
+  const [errorData, setErrorData] = useState(null);
+  const [failedCreate, setFailedCreate] = useState(false);
 
   const courseUrl = "http://localhost:5000/api/courses";
 
@@ -35,8 +38,12 @@ function CreateCourse({ coursesPropsObj, history }) {
 
     try {
       await Axios.post(courseUrl, {}, headerConfig);
+      setSuccessAlert(true);
+      setTimeout(() => history.goBack(), 1500);
     } catch (error) {
-      return console.log(error.response);
+      console.log(error.response);
+      setErrorData(error.response.data.error);
+      setFailedCreate(true);
     }
   };
 
@@ -59,21 +66,15 @@ function CreateCourse({ coursesPropsObj, history }) {
       )}
       <div className="bounds course--detail">
         <div>
-          {/* <div>
-          <h2 className="validation--errors--label">Validation errors</h2>
-          <div className="validation-errors">
-            <ul>
-              <li>Please provide a value for "Title"</li>
-              <li>Please provide a value for "Description"</li>
-            </ul>
-          </div>
-        </div> */}
+          {failedCreate && errorData && <ValidationErrors data={errorData}/>}
           <form
             onSubmit={e => {
               e.preventDefault();
+              setErrorData(null);
+              setFailedCreate(false);
               submitForm();
-              setSuccessAlert(true);
-              setTimeout(() => history.goBack(), 1500);
+              // setSuccessAlert(true);
+              // setTimeout(() => history.goBack(), 1500);
             }}
           >
             <div className="grid-66">

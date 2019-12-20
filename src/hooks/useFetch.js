@@ -15,7 +15,7 @@ export const useFetch = (url, options) => {
             setResponse(course.data);
             setIsLoading(false);
           } catch (error) {
-            console.log(error.response);
+            // console.log(error.response);
             setError(error.response);
           }
         }, 
