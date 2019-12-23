@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { withRouter, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
-import Fade from "react-reveal/Fade";
+import SuccessAlert from "./SuccessAlert";
 import ValidationErrors from "./ValidationErrors";
 import { useFetch } from "../hooks/useFetch";
 
@@ -84,20 +84,7 @@ function UpdateCourse({ coursesPropsObj, history }) {
   return (
     courseDetails && (
       <>
-        {successAlert && !failedUpdate && (
-          <Fade>
-            <h2
-              style={{
-                textAlign: "center",
-                color: "green",
-                left: "43%",
-                position: "absolute"
-              }}
-            >
-              Course Updated.
-            </h2>
-          </Fade>
-        )}
+        {successAlert && !failedUpdate && <SuccessAlert title={"Course Updated"}/>}
 
         <hr />
 

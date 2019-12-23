@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import Axios from "axios";
-import Fade from "react-reveal/Fade";
+import SuccessAlert from "./SuccessAlert";
 import ValidationErrors from './ValidationErrors';
 
 function CreateCourse({ coursesPropsObj, history }) {
@@ -50,20 +50,7 @@ function CreateCourse({ coursesPropsObj, history }) {
   // Commented section will be to display error messages.
   return (
     <>
-      {successAlert && (
-        <Fade>
-          <h2
-            style={{
-              textAlign: "center",
-              color: "green",
-              left: "43%",
-              position: "absolute"
-            }}
-          >
-            Course Updated.
-          </h2>
-        </Fade>
-      )}
+      {successAlert && <SuccessAlert title={'Course Updated'} />}
       <div className="bounds course--detail">
         <div>
           {failedCreate && errorData && <ValidationErrors data={errorData}/>}
@@ -73,8 +60,6 @@ function CreateCourse({ coursesPropsObj, history }) {
               setErrorData(null);
               setFailedCreate(false);
               submitForm();
-              // setSuccessAlert(true);
-              // setTimeout(() => history.goBack(), 1500);
             }}
           >
             <div className="grid-66">
